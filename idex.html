@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LYSA — Lycée Saguidiba</title>
+<meta name="theme-color" content="#C9A84C">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="LYSA">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D1B2A;--gold:#C9A84C;--gold-l:#E8C96A;--white:#FAFAF7;--muted:rgba(250,250,247,0.5);--border:rgba(201,168,76,0.2);--card:rgba(255,255,255,0.05);--danger:#E86A8A;--success:#6AE8A5}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"DM Sans",sans-serif;background:var(--navy);color:var(--white);min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 20% 0%,rgba(201,168,76,0.07),transparent 60%);pointer-events:none;z-index:0}
+nav{position:fixed;top:0;width:100%;z-index:200;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;background:rgba(13,27,42,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo img{width:36px;height:36px;border-radius:8px;object-fit:cover}
+.logo-name{font-family:"Playfair Display",serif;font-size:18px;letter-spacing:2px}
+.logo-sub{font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;display:block}
+.nav-right{display:flex;align-items:center;gap:8px}
+.nav-user{display:none;align-items:center;gap:6px;background:rgba(201,168,76,0.1);border:1px solid var(--border);padding:6px 12px;border-radius:100px;font-size:12px;cursor:pointer}
+.nav-user.show{display:flex}
+.btn-nav{background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--navy);padding:8px 16px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;border:none;font-family:"DM Sans",sans-serif}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(13,27,42,0.97);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0 14px}
+.bnav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;color:var(--muted);cursor:pointer;padding:4px 10px;background:none;border:none;font-family:"DM Sans",sans-serif;transition:color 0.2s}
+.bnav-btn.active,.bnav-btn:hover{color:var(--gold)}
+.bnav-icon{font-size:22px}
+.page{display:none;position:relative;z-index:1;padding:76px 18px 90px;max-width:680px;margin:0 auto;min-height:100vh}
+.page.active{display:block}
+.pg-title{font-family:"Playfair Display",serif;font-size:26px;margin-bottom:4px}
+.pg-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+.hero{text-align:center;padding:110px 16px 50px;max-width:680px;margin:0 auto;position:relative;z-index:1}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(201,168,76,0.1);border:1px solid var(--border);color:var(--gold);font-size:10px;letter-spacing:3px;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:22px}
+.hero h1{font-family:"Playfair Display",serif;font-size:clamp(34px,9vw,60px);line-height:1.1;margin-bottom:14px}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero p{font-size:15px;color:var(--muted);max-width:440px;margin:0 auto 28px;line-height:1.7}
+.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--navy);padding:12px 26px;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;border:none;font-family:"DM Sans",sans-serif;text-decoration:none;transition:transform 0.2s}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1.5px solid var(--border);color:var(--white);padding:12px 26px;border-radius:10px;font-weight:500;font-size:13px;cursor:pointer;font-family:"DM Sans",sans-serif}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:28px 0}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:transform 0.2s,border-color 0.2s}
+.feat-card:hover{transform:translateY(-3px);border-color:rgba(201,168,76,0.45)}
+.feat-icon{font-size:28px;margin-bottom:8px}
+.feat-card h3{font-family:"Playfair Display",serif;font-size:15px;margin-bottom:5px}
+.feat-card p{font-size:11px;color:var(--muted);line-height:1.5}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px}
+.card-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-family:"Playfair Display",serif;font-size:15px}
+.card-body{padding:18px}
+.badge{font-size:10px;background:rgba(201,168,76,0.15);color:var(--gold);padding:3px 10px;border-radius:100px;border:1px solid var(--border);font-family:"DM Sans",sans-serif}
+.bulletin-box{border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,0.03);padding:30px;text-align:center}
+.bi{font-size:44px;margin-bottom:12px}
+.bulletin-box h3{font-family:"Playfair Display",serif;font-size:18px;margin-bottom:8px}
+.bulletin-box p{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.7}
+.msg-wrap{display:flex;height:calc(100vh - 170px);background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.msg-sidebar{width:200px;border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;background:rgba(0,0,0,0.1)}
+.msg-sidebar-hd{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.msg-sidebar-hd span{font-size:13px;font-weight:600}
+.new-btn{background:rgba(201,168,76,0.15);border:1px solid var(--border);color:var(--gold);padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-family:"DM Sans",sans-serif}
+.conv-list{flex:1;overflow-y:auto}
+.conv-item{padding:10px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.03);display:flex;align-items:center;gap:8px;transition:background 0.15s}
+.conv-item:hover,.conv-item.active{background:rgba(201,168,76,0.08)}
+.av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.conv-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv-prev{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg-main{flex:1;display:flex;flex-direction:column;min-width:0}
+.msg-hd{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.msg-hd h3{font-size:14px;font-weight:600}
+.msg-hd p{font-size:11px;color:var(--muted)}
+.msgs-area{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
+.msg-row{display:flex;gap:6px;align-items:flex-end}
+.msg-row.mine{flex-direction:row-reverse}
+.bubble{max-width:78%;padding:9px 13px;border-radius:14px;font-size:13px;line-height:1.5}
+.msg-row.other .bubble{background:rgba(255,255,255,0.07);border-bottom-left-radius:3px}
+.msg-row.mine .bubble{background:rgba(201,168,76,0.2);border-bottom-right-radius:3px}
+.bubble .bauthor{font-size:10px;color:var(--gold);font-weight:600;margin-bottom:2px}
+.btime{font-size:10px;color:var(--muted);margin-bottom:3px;flex-shrink:0}
+.msg-input-row{padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center}
+.msg-ta{flex:1;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:10px;padding:9px 12px;color:var(--white);font-family:"DM Sans",sans-serif;font-size:13px;outline:none;resize:none}
+.msg-ta:focus{border-color:rgba(201,168,76,0.5)}
+.msg-ta::placeholder{color:rgba(250,250,247,0.25)}
+.send-btn{background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--navy);border:none;padding:9px 14px;border-radius:9px;font-size:16px;cursor:pointer}
+.create-grp-btn{width:100%;background:rgba(201,168,76,0.08);border:1.5px dashed var(--border);color:var(--gold);padding:13px;border-radius:12px;font-size:13px;cursor:pointer;font-family:"DM Sans",sans-serif;margin-bottom:14px}
+.grp-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:10px;transition:border-color 0.2s}
+.grp-card:hover{border-color:rgba(201,168,76,0.4)}
+.grp-av{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(201,168,76,0.12);flex-shrink:0}
+.grp-name{font-weight:600;font-size:14px;margin-bottom:2px}
+.grp-meta{font-size:11px;color:var(--muted)}
+.grp-badge{font-size:10px;background:rgba(201,168,76,0.12);color:var(--gold);padding:3px 9px;border-radius:100px;border:1px solid var(--border);margin-left:auto;flex-shrink:0}
+.forum-compose{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;display:none}
+.forum-row{display:flex;gap:10px;align-items:flex-end}
+.forum-ta{flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--white);font-family:"DM Sans",sans-serif;font-size:13px;outline:none;resize:none}
+.forum-ta::placeholder{color:rgba(250,250,247,0.25)}
+.post-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
+.post-hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.post-nom{font-size:13px;font-weight:600;color:var(--gold)}
+.post-cl{font-size:10px;color:var(--muted)}
+.post-time{font-size:10px;color:var(--muted);margin-left:auto}
+.post-text{font-size:13px;color:rgba(250,250,247,0.8);line-height:1.6}
+.overlay{position:fixed;inset:0;background:rgba(13,27,42,0.9);backdrop-filter:blur(8px);z-index:999;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.25s;padding:16px}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:#101B28;border:1px solid var(--border);border-radius:18px;padding:28px;width:100%;max-width:400px;transform:translateY(18px);transition:transform 0.25s;max-height:88vh;overflow-y:auto}
+.overlay.open .modal{transform:translateY(0)}
+.modal h2{font-family:"Playfair Display",serif;font-size:22px;margin-bottom:4px}
+.modal .sub{font-size:12px;color:var(--muted);margin-bottom:20px}
+.modal-actions{display:flex;gap:8px;margin-top:18px}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--white);padding:10px 18px;border-radius:9px;cursor:pointer;font-family:"DM Sans",sans-serif;font-size:13px}
+.err{color:var(--danger);font-size:12px;margin-top:6px;display:none}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.form-group input,.form-group select{width:100%;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:9px;padding:11px 14px;color:var(--white);font-family:"DM Sans",sans-serif;font-size:13px;outline:none}
+.form-group input::placeholder{color:rgba(250,250,247,0.2)}
+.form-group select option{background:var(--navy)}
+.notif{position:fixed;top:74px;right:16px;z-index:9999;background:#101B28;border:1px solid var(--border);border-radius:10px;padding:11px 16px;font-size:13px;transform:translateX(220px);opacity:0;transition:all 0.3s;max-width:260px}
+.notif.show{transform:translateX(0);opacity:1}
+.notif.ok{border-color:rgba(106,232,165,0.4);color:var(--success)}
+.notif.ko{border-color:rgba(232,106,138,0.4);color:var(--danger)}
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:28px auto;z-index:1;max-width:680px}
+footer{border-top:1px solid var(--border);padding:22px;text-align:center;position:relative;z-index:1}
+footer p{font-size:11px;color:rgba(250,250,247,0.25)}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+@media(max-width:460px){.msg-sidebar{width:160px}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">
+    <img src="data:image/webp;base64,UklGRnINAABXRUJQVlA4IGYNAABQMQCdASqAAIAAPrFInEmnJCKhMnkaYOAWCWYA04va8MzejzB9j0MbZzzEedP6Q/8r6QHUh7z1/iLAQ/T+E/kM9rSFjifqt/B84+834vagXsjwPdlfar0AvZ77Z3sOop4B9gD9QvG98Fr0P2AP036E/1l57vqf9pPgM/Xr02fZB+8HtJKDDGVq9zyOM7WLq4zWX/+IcBfyKaVdgCU3Gms1cGCjnkBPT1nFf53YqAy0kDwZc3Hta0MptgMX7NsTIn5O9WtwvjqLcD8p8uU9Ww5p1C1oNmlIYkjvOrREB6nux0N3CKr45T1bX79ene6r02Mc3ix5ANGxxmVgKXWTaLAgx/mqqidmyu0gZ9AwcAldIQIEJrx5ujdBng/+Hb1im3NiHdZK8P58bxizapKO1NyLPK8XtCjnrMiOkOO671iMLdyZgkh/JGBGvQUKrsI6YfIw0ilXf4I8yJwsuHlb6BKSbXb+6kkcigA99po9u52EHCNhygAi4XKOppPONuJqOcTjon2m0Eeov7RJCISlQwR0fsAAAP742iDEAa9ZGcy3l9ywX8TLQUZ+Yu6Vbv3U4ynQio4S7f3fa1S/fDdi8RqvLAOANRLsGFWz/wM7rafJZbtPUElqUORszhvbYR7kpW6uzsgiM0S2rAeUyW0iVKyZbkFA50IT+pykJS1ergTtSB/JWlaQndB9UUpBQIaqhCEmRosk/xEoUTKNe22eNoQdrOopMAN3u8MzJIyhGNSS2EAz+W3Jwet13X7F47kh2FB+JMfnb8Qr+AVzvDmNQyCyW4Ep/amsfEKPLt1Tc/McSp5rU/u7aBf31ZAtus+BG+Go4tLQQu5dgioqHE+DdQOINo+N4mfPBTLgD4tE6QIPFSrz7GpuLPqcDn4DokHdakXLov6vCCk6JUaAHF1gGgyWiJmYQWdc2rPGd2YaC/f1vpbYV+qlCIMeWMza4FOoCkAFpb/hHo1s+1isNFNYLKDzwsmiS2M2HMBdVtsu0llviPwxbfwSXr0rYzz5KZtd76nmh932iHPaSMeemHKUjFS42JhXtG4ky01akrrFPsB4t13zYv5mt/fXiy8j3jhW5imoiyUjOBhjI/yxu9BVhkl+l7uS62EN4OWjcX/G6GzOMJ939V7TK+6JTr5YxG7VUq/mjRS5Ua27y8Fz8C4uAxkkWQYk46Y3tjQXtARntAlwiL3boGgO8cRaFhuinaoHp7abJgcdHFFdyApPQz/k3n8/HmbJOekLZ3TDTe5M3iASMgu0SwtV1ZvYvGb7I0faznfz/0q0T5weXvwh0zOMFNn7j1yXPeS3nfpawqerfmAeTg+a0qRpQRRYgmuk6UUKyc4yTLIn8eH1P+G/WSMNCmGnvFAvlxTWBdSJpxAbPyU3LXFAeEPO75HG+B9bJXZ3uPuYCMFZIEBouuMzHdrJYeKplMK3EtI9qTMBasASTjxFi6w9RWyGx/SG+GRljQ7y1sxWeo80YvHpH48Tst86OZ8wtUMCrDqlDaHlUwvLDl47DeDRftBjN+TF/vQHoikPPHrZy607JnwAPKskA8eo+q3KabDEWGj0aQAa8ma5d57Bn2qCxx214VtLyHsP5gSPjJOwAj01+IslAedhrK5cVB7ksHDVQy75b5RTCbt9Jw2G1y+WpmyXiEMojECO9rlSQ+LT8UxN2inYdt8VnsEnWHrGbNID/pWHcJGcVjEOH2YW2awxyzFqrnFrcYzhslg1UwtlJfIFlXNHD0uDsdFeVfOcRKtuD82oQkQLZtkcmZkbyZyi4TYNpq7V+xL51DI0Xc0TRcHSxnyHd8+onNjhd7paoBT3ik2ccHdfni9YkDZbPoxrPy/XwNNBdZQ5iv+2eR0IliwGxpnx1Gv7rfDd70MQL1Ys0AaCiNBGzizkFPHvzmHEegEFTR5omuWeTfgSrLV09YMn/RJYWD8UwTLyDRxqW/qWNZocG6LfwxJrFEfi15s95vpkGZKvrRluGTMSaI+E5DnCIYbEUwt5lIfzjN6Zxd+rSmjTl6NQD/yg13DmGf5sOGv/eHyozoz/gVLRewdiuss8tnWZwAuBRanmzbCK7fXbnsW1Y+GAD+0ad/92mGhSeRyr4m5bUXc5razuaZ9m0/dxX7ELk+Y3d8SwHXAVqIMcwmK1AyOntTZxq0Ftb52gJX4/2EYmBW71z6GL9Fn1jf8DJHjAveTmvfJ5GxtLRCqfJd7i2ldFxbyNIMkw5Nn/6W23YyhirZzbAYTNlad0Z9aRNLZCO0ne85dOEw2UZyizG+SmK3fVcLrtnbToPels8YNYh+CcsXRxSVzfpdum3/1JEbBqzPKg1sKd9XSqLq6Yt+iOCOaiA7BwyfNudbJJggz/SDn78V+Ygc0JxIkT1uM/v0kiyCsmAdi/vhnaXw1MG36YLEHwPMRmIAbKHeSvy0aR8TeiSRekDf5o5qclRiyr9MikjBvXNhs93zq1YreNxpyRD/yfXMK9iroIBADTFmFypVBYoCzx1pL+t1nI0ZoSEdzQyDN/8oGy4jm6r1t5wWBzID5jZv/23as+KCq/Od/2gWzCZW2K/yxVEtSm3X7RraIzHs3dSYjYNL9FoQwcE/X6CwBpAzTYrXxna49GLwqHoQRWXwvhrJz0C2K0A+fwR1Ji6KHuRhZCeB1biYyy/kpCza9pVQQj0fKdI82LtFevVM3CkbB5BVO+XvM4kq0Fk7OnbrfQb3OawkYexdY3cferaeyKermW3cxnXSOxggODzzynq3GK5/9brTgg3B7Uv9PfHxtuocq930PlCYW9qPESW+iJjmYtp8PAd7mj2M+GzdRArK4XmakZcxVPS++mYwJ1QfTluBc4HRBcRC4d8X1As+gqtnL13iIwFVyTGpDnW5hygRq7h0HdPS5g8jwNWX4LghY88zP0DKGBVOzTE/XnF2fb03U4TsQRduliiDbJ12SL2GrvevofL8/SpsxOaPB/pZFGu/7jMPXB+fgpwqQCvSvq9Gyld9cemJwrXBcpJ9YaC3isSA6NRKdkDOjecNrvPc5trxYdHus/dUzwcWQGOgQKoFQDA1MqMkZp6oIX10VZzIVKgQMxS4T1L82B7y9uyI2Z8pR/LQOjz2PEyJ1wBbPXPLXwKFj4HIrLTphQpvgECaAQ+DMaSOLWjpkOdLqs1kbt4cP3bMHWm5owyC9JFFKYLvAXWoVHbeBBWhOEcWU28mlzmo+I197xm3JnMI2W8UYE+pSiVl7Kk4rAZlh4+A5a70LaHrAmMUtYP43CceqdFfEKoZ0BlB3S+WXl+DmVnl7+B/hqz5DQejnfZ7/I/RVMm15q0guXLyhZL2T/4u+ESszco//0aIcmZZHi8Rafe2WrZ8diiiPdPYk1c7XE6oDYAMCR90qyqpEIhPZ3C2ErlX0RFTQaOmMiq4Oi0cwF1AHPVtnraz8MrPdt7vmM2acjBglL2v5d7jfqi2MdXCUulSs+o3h2TdMozFdjFnlz/ebLgJSdGeYzDXLurqueNW/67OSHNEzuvIUfRqkLxIEaFehJ/ATWbY5FC02mrowjECY6HMOsN2Cae0M7qBSEoWN9FraPRXESDjqJu5b5HNcCBQenVyvqX7yNJKNtWaCSMFbdw/ofHJ2SEosNZP8eyunR0FDGvdjikasICpdxVjQ2NJENKfe2qq9Vk187yl280i6LdsrRuUSa76FLtuN9mqEGPalpXJxGuz2+zhQMHrcfS6/Fp3wPX+zZ9S+ecEsbmYHtT6JOMe66Aj6K+cQzxsXAhtIAhD1kefZtgUHGtqOIZ45+/aRzhO/AcO69/8Kh/fAakK/68QPrl4qaqSzYW3HnugdLxfSXpZ4q2afw6dzF1jb3V5n4rB80ZSZDe1Q2F2iSYr88WOxsFGi1TC5pTKE14WpqN/fcDMucVKXywGPpPLq32Yqlc/qOoTqQNqodoho7LgX5Rk4XTeB1MsLcMJG7Mrx3J5YRiDVwqngaBIJGE90BsLqzXKty4JPok9bE1iaP+ThR2oog6FVCT8P3xwVLzsMAjg50lIkFuGy/CbfbPPGyNQEyYgKvc+bVsAz6YGHHDKD30VUzc6NJsQkBE1mGexdjrRkuwelSAX6LHf48/pvrq4m00nwirwO7E7Sp58U4av2DHDsQs/XcVzarNW0ixffDEUOSIhlVmTd9JdklAnfcNpfOhhVXsP9J4abW4i4H1iYCUV+Dn+COZvu6bS5PDkU9kUwaw+rA7ISC40DIJZ9PsmQhY4tRj/z3zvN573AQ1HYoBzodp+SqsKu7Ml6IgsUSCL6p57KYcB4T9/ifNf86xbJvc14YEaF/DV7ufAErj1MC/urZTEFbb7eM8WHInK2WsX2++NCu+LWeXP8yGRejLzYtVLIst2fHhyNAqbZmQH/5xANEz52I2Zj7KVRnATPcofe0Ng9Sfhf3+R9KSIPmm58b28V2ioURVeYcy5+yR+poO53RBxd6wiB2Ax0wpmqiG93pKPvsqte2uWTg17oUv7ixBaaecqDcl7wh0yjdbH+zewAeBzlnnN4y+u83b8qqxqy2PBXnfixUfSlLsP9pJF655dBwW10H5kmDvODBoW5Q8xD2ZVNgAAAA" alt="LYSA">
+    <div><div class="logo-name">LYSA</div><span class="logo-sub">Lycée Saguidiba</span></div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-user" id="navUser" onclick="doLogout()">
+      <span id="navUserName"></span><span style="font-size:10px;color:var(--muted)">✕</span>
+    </div>
+    <button class="btn-nav" id="navLoginBtn" onclick="openModal('auth')">Se connecter</button>
+  </div>
+</nav>
+<div class="notif" id="notif"></div>
+
+<div class="page active" id="page-accueil">
+  <div class="hero">
+    <div class="hero-tag">✦ Yop. Niangon, Côte d'Ivoire</div>
+    <h1>L'excellence <em>scolaire</em><br>connectée</h1>
+    <p>Bulletins, messages privés, groupes et forum — tout pour la communauté LYSA.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="openModal('auth')">🎓 Mon espace</button>
+      <button class="btn-outline" onclick="goPage('bulletins')">📋 Bulletins</button>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div style="max-width:680px;margin:0 auto;padding:0 18px 80px">
+    <div class="feat-grid">
+      <div class="feat-card" onclick="goPage('bulletins')"><div class="feat-icon">📊</div><h3>Bulletins</h3><p>Consultez vos résultats en ligne</p></div>
+      <div class="feat-card" onclick="requireAuth(function(){goPage('messages')})"><div class="feat-icon">💬</div><h3>Messages privés</h3><p>Échanges confidentiels entre élèves</p></div>
+      <div class="feat-card" onclick="requireAuth(function(){goPage('groupes')})"><div class="feat-icon">👥</div><h3>Groupes</h3><p>Créez des groupes comme WhatsApp</p></div>
+      <div class="feat-card" onclick="goPage('forum')"><div class="feat-icon">📢</div><h3>Forum public</h3><p>Actualités et annonces de l'école</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-bulletins">
+  <div class="pg-title">📋 Bulletins scolaires</div>
+  <div class="pg-sub">Lycée Saguidiba LYSA — 2024-2025</div>
+  <div class="card">
+    <div class="card-header">Accès aux bulletins <span class="badge">En ligne</span></div>
+    <div class="card-body">
+      <div class="bulletin-box">
+        <div class="bi">📋</div>
+        <h3>Bulletins officiels LYSA</h3>
+        <p>Accédez à vos notes et appréciations via le portail officiel.</p>
+        <a class="btn-primary" href="https://share.google/unDCPkA5WXYTUlbeA" target="_blank" style="text-decoration:none">📂 Ouvrir mes bulletins</a>
+        <p style="font-size:11px;color:rgba(250,250,247,0.25);margin-top:10px;margin-bottom:0">Connexion Google requise</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-messages">
+  <div class="pg-title">💬 Messages privés</div>
+  <div class="pg-sub">Échangez en toute confidentialité</div>
+  <div class="msg-wrap">
+    <div class="msg-sidebar">
+      <div class="msg-sidebar-hd"><span>Conversations</span><button class="new-btn" onclick="openModal('newconv')">+ Nouveau</button></div>
+      <div class="conv-list" id="convList"></div>
+    </div>
+    <div class="msg-main">
+      <div class="msg-hd"><div style="font-size:22px">💬</div><div><h3 id="convTitle">Choisissez une conversation</h3><p id="convSub">Sélectionnez à gauche</p></div></div>
+      <div class="msgs-area" id="msgsArea"><div style="text-align:center;color:var(--muted);font-size:13px;padding:40px">Sélectionnez une conversation</div></div>
+      <div class="msg-input-row" id="msgInputRow" style="display:none">
+        <textarea class="msg-ta" id="privInput" rows="1" placeholder="Votre message..."></textarea>
+        <button class="send-btn" onclick="sendPriv()">&#10148;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-groupes">
+  <div class="pg-title">👥 Groupes</div>
+  <div class="pg-sub">Créez et rejoignez des groupes de discussion</div>
+  <button class="create-grp-btn" onclick="openModal('creategrp')">➕ Créer un nouveau groupe</button>
+  <div id="grpList"></div>
+</div>
+
+<div class="page" id="page-forum">
+  <div class="pg-title">📢 Forum public</div>
+  <div class="pg-sub">Annonces et échanges pour toute la communauté</div>
+  <div class="forum-compose" id="forumCompose">
+    <div class="forum-row">
+      <div class="av" id="forumAv" style="color:var(--navy)">?</div>
+      <textarea class="forum-ta" id="forumInput" rows="2" placeholder="Partagez une information..."></textarea>
+      <button class="send-btn" onclick="postForum()">&#10148;</button>
+    </div>
+  </div>
+  <div id="forumPosts"></div>
+</div>
+
+<div class="bottom-nav">
+  <button class="bnav-btn active" data-page="accueil" onclick="goPage('accueil')"><span class="bnav-icon">🏠</span>Accueil</button>
+  <button class="bnav-btn" data-page="bulletins" onclick="goPage('bulletins')"><span class="bnav-icon">📋</span>Bulletins</button>
+  <button class="bnav-btn" data-page="messages" onclick="requireAuth(function(){goPage('messages')})"><span class="bnav-icon">💬</span>Messages</button>
+  <button class="bnav-btn" data-page="groupes" onclick="requireAuth(function(){goPage('groupes')})"><span class="bnav-icon">👥</span>Groupes</button>
+  <button class="bnav-btn" data-page="forum" onclick="goPage('forum')"><span class="bnav-icon">📢</span>Forum</button>
+</div>
+<footer><p>© 2025 Lycée Saguidiba LYSA — Yop. Niangon | ☎ 01 00 49 99 / 02 23 15 50</p></footer>
+
+<!-- MODALS -->
+<div class="overlay" id="modal-auth">
+  <div class="modal">
+    <div id="as-choice">
+      <h2>Bienvenue</h2><div class="sub">Connectez-vous ou créez votre compte</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button class="btn-primary" onclick="authStep('login')" style="justify-content:center">🔑 Se connecter</button>
+        <button class="btn-outline" onclick="authStep('register')" style="justify-content:center">✨ Créer mon compte</button>
+      </div>
+      <button class="btn-ghost" onclick="closeModal('auth')" style="width:100%;margin-top:10px">Fermer</button>
+    </div>
+    <div id="as-login" style="display:none">
+      <h2>Connexion</h2><div class="sub">Matricule + code personnel</div>
+      <div class="form-group"><label>Matricule</label><input type="text" id="li_m" placeholder="LYSA-2025-001"></div>
+      <div class="form-group"><label>Code</label><input type="password" id="li_c" placeholder="Votre code"></div>
+      <div class="err" id="li_e"></div>
+      <div class="modal-actions">
+        <button class="btn-ghost" onclick="authStep('choice')">← Retour</button>
+        <button class="btn-primary" onclick="doLogin()" style="flex:1;justify-content:center">Connexion →</button>
+      </div>
+    </div>
+    <div id="as-register" style="display:none">
+      <h2>Créer mon compte</h2><div class="sub">Inscription rapide</div>
+      <div class="form-group"><label>Prénom et Nom</label><input type="text" id="re_n" placeholder="ex: Aminata Koné"></div>
+      <div class="form-group"><label>Matricule</label><input type="text" id="re_m" placeholder="LYSA-2025-001"></div>
+      <div class="form-group"><label>Classe</label><input type="text" id="re_cl" placeholder="ex: Terminale A"></div>
+      <div class="form-group"><label>Code (4 à 10 car.)</label><input type="password" id="re_c" placeholder="Choisissez votre code"></div>
+      <div class="err" id="re_e"></div>
+      <div class="modal-actions">
+        <button class="btn-ghost" onclick="authStep('choice')">← Retour</button>
+        <button class="btn-primary" onclick="doRegister()" style="flex:1;justify-content:center">Créer →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="modal-newconv">
+  <div class="modal">
+    <h2>Nouvelle conversation</h2><div class="sub">Entrez le matricule du contact</div>
+    <div class="form-group"><label>Matricule du contact</label><input type="text" id="nc_m" placeholder="LYSA-2025-002"></div>
+    <div class="err" id="nc_e"></div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('newconv')">Annuler</button>
+      <button class="btn-primary" onclick="startConv()" style="flex:1;justify-content:center">Démarrer →</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="modal-creategrp">
+  <div class="modal">
+    <h2>Créer un groupe</h2><div class="sub">Groupe pour votre classe ou club</div>
+    <div class="form-group"><label>Nom du groupe</label><input type="text" id="cg_n" placeholder="ex: Terminale S2"></div>
+    <div class="form-group"><label>Description</label><input type="text" id="cg_d" placeholder="ex: Groupe officiel"></div>
+    <div class="form-group"><label>Icône</label>
+      <select id="cg_i"><option value="📚">📚 Classe</option><option value="🔬">🔬 Sciences</option><option value="🎨">🎨 Arts</option><option value="⚽">⚽ Sport</option><option value="💻">💻 Informatique</option><option value="🎵">🎵 Musique</option><option value="🏫">🏫 École</option></select>
+    </div>
+    <div class="err" id="cg_e"></div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('creategrp')">Annuler</button>
+      <button class="btn-primary" onclick="createGrp()" style="flex:1;justify-content:center">Créer →</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="modal-grpchat">
+  <div class="modal" style="max-width:480px;padding:0;overflow:hidden">
+    <div class="msg-hd" style="padding:14px 18px;border-bottom:1px solid var(--border)">
+      <div style="font-size:22px" id="gc_icon">👥</div>
+      <div style="flex:1"><h3 id="gc_title">Groupe</h3><p id="gc_meta" style="font-size:11px;color:var(--muted)"></p></div>
+      <button onclick="closeModal('grpchat')" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer">✕</button>
+    </div>
+    <div class="msgs-area" id="gcMsgs" style="height:300px"></div>
+    <div class="msg-input-row">
+      <textarea class="msg-ta" id="gcInput" rows="1" placeholder="Message de groupe..."></textarea>
+      <button class="send-btn" onclick="sendGrpMsg()">&#10148;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var AC=["linear-gradient(135deg,#C9A84C,#E8C96A)","linear-gradient(135deg,#4C7BC9,#6A9AE8)","linear-gradient(135deg,#4CC980,#6AE8A5)","linear-gradient(135deg,#C94C6E,#E86A8A)","linear-gradient(135deg,#9B4CC9,#BE6AE8)"];
+function avc(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%AC.length;return AC[h]}
+function nt(){var d=new Date();return d.getHours()+":"+("0"+d.getMinutes()).slice(-2)}
+function notif(m,t){var n=document.getElementById("notif");n.textContent=m;n.className="notif "+(t||"ok")+" show";setTimeout(function(){n.className="notif"},2800)}
+function serr(id,m){var e=document.getElementById(id);e.textContent="❌ "+m;e.style.display="block"}
+function herr(id){var e=document.getElementById(id);if(e)e.style.display="none"}
+function gls(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}}
+function sls(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function gU(){return gls("lU")||{}}
+function sU(u){sls("lU",u)}
+function gC(){return gls("lC")||{}}
+function sC(c){sls("lC",c)}
+function gG(){return gls("lG")||[]}
+function sG(g){sls("lG",g)}
+function gP(){return gls("lP")||[]}
+function sP(p){sls("lP",p)}
+function gMe(){try{return JSON.parse(sessionStorage.getItem("lMe")||"null")}catch(e){return null}}
+function sMe(u){sessionStorage.setItem("lMe",JSON.stringify(u))}
+
+function authStep(s){
+  ["choice","login","register"].forEach(function(x){document.getElementById("as-"+x).style.display=x===s?"block":"none"});
+  herr("li_e");herr("re_e");
+}
+function doLogin(){
+  var m=document.getElementById("li_m").value.trim().toUpperCase();
+  var c=document.getElementById("li_c").value.trim();
+  herr("li_e");
+  if(!m||!c){serr("li_e","Remplissez tous les champs");return}
+  var u=gU();
+  if(!u[m]||u[m].code!==c){serr("li_e","Matricule ou code incorrect");return}
+  sMe({nom:u[m].nom,matricule:m,classe:u[m].classe});
+  closeModal("auth");afterLogin();notif("Bienvenue "+u[m].nom.split(" ")[0]+" ! 👋");
+}
+function doRegister(){
+  var n=document.getElementById("re_n").value.trim();
+  var m=document.getElementById("re_m").value.trim().toUpperCase();
+  var cl=document.getElementById("re_cl").value.trim();
+  var c=document.getElementById("re_c").value.trim();
+  herr("re_e");
+  if(!n||!m||!cl||!c){serr("re_e","Remplissez tous les champs");return}
+  if(c.length<4){serr("re_e","Code trop court (min 4 car.)");return}
+  var u=gU();
+  if(u[m]){serr("re_e","Matricule déjà utilisé");return}
+  u[m]={nom:n,classe:cl,code:c};sU(u);
+  sMe({nom:n,matricule:m,classe:cl});
+  closeModal("auth");afterLogin();notif("Bienvenue "+n.split(" ")[0]+" ! 🎉");
+}
+function doLogout(){sMe(null);location.reload()}
+function requireAuth(fn){if(!gMe()){openModal("auth");return}fn()}
+function afterLogin(){
+  var me=gMe();if(!me)return;
+  document.getElementById("navLoginBtn").style.display="none";
+  document.getElementById("navUser").classList.add("show");
+  document.getElementById("navUserName").textContent="👤 "+me.nom.split(" ")[0];
+  document.getElementById("forumCompose").style.display="block";
+  var fa=document.getElementById("forumAv");fa.textContent=me.nom[0];fa.style.background=avc(me.nom);
+  rCL();rGL();rFP();
+}
+function goPage(id){
+  document.querySelectorAll(".page").forEach(function(p){p.classList.remove("active")});
+  document.getElementById("page-"+id).classList.add("active");
+  document.querySelectorAll(".bnav-btn").forEach(function(b){b.classList.toggle("active",b.dataset.page===id)});
+  if(id==="forum")rFP();
+  if(id==="messages")rCL();
+  if(id==="groupes")rGL();
+}
+function openModal(id){
+  document.getElementById("modal-"+id).classList.add("open");
+  if(id==="auth")authStep("choice");
+}
+function closeModal(id){document.getElementById("modal-"+id).classList.remove("open")}
+document.addEventListener("click",function(e){
+  ["auth","newconv","creategrp","grpchat"].forEach(function(id){
+    var el=document.getElementById("modal-"+id);
+    if(el&&e.target===el)closeModal(id);
+  });
+});
+
+var aC=null;
+function ck(a,b){return[a,b].sort().join("|")}
+function startConv(){
+  var me=gMe();var mat=document.getElementById("nc_m").value.trim().toUpperCase();
+  herr("nc_e");
+  if(!mat){serr("nc_e","Entrez un matricule");return}
+  if(mat===me.matricule){serr("nc_e","Vous ne pouvez pas vous écrire");return}
+  var u=gU();
+  if(!u[mat]){serr("nc_e","Aucun utilisateur trouvé");return}
+  document.getElementById("nc_m").value="";
+  closeModal("newconv");oConv(mat,u[mat].nom);
+}
+function oConv(mat,nom){
+  var me=gMe();
+  aC=ck(me.matricule,mat);
+  document.getElementById("convTitle").textContent=nom;
+  document.getElementById("convSub").textContent="Conversation privée";
+  document.getElementById("msgInputRow").style.display="flex";
+  rM();rCL();
+  document.querySelectorAll(".conv-item").forEach(function(c){c.classList.toggle("active",c.dataset.key===aC)});
+}
+function rCL(){
+  var me=gMe();if(!me)return;
+  var cv=gC();var us=gU();
+  var ks=Object.keys(cv).filter(function(k){return k.indexOf(me.matricule)>=0});
+  var list=document.getElementById("convList");
+  list.innerHTML=ks.length?"":"<div style='padding:18px;text-align:center;font-size:12px;color:var(--muted)'>Aucune conversation<br>→ + Nouveau</div>";
+  ks.forEach(function(k){
+    var pts=k.split("|");var ot=pts[0]===me.matricule?pts[1]:pts[0];
+    var ms=cv[k]||[];var last=ms[ms.length-1];
+    var nm=us[ot]?us[ot].nom:ot;
+    var d=document.createElement("div");d.className="conv-item"+(aC===k?" active":"");d.dataset.key=k;
+    d.innerHTML='<div class="av" style="background:'+avc(nm)+';color:var(--navy)">'+nm[0]+'</div><div style="min-width:0"><div class="conv-name">'+nm+'</div><div class="conv-prev">'+(last?last.t.substring(0,25)+"...":"Démarrer...")+'</div></div>';
+    (function(m2,n2){d.onclick=function(){oConv(m2,n2)}})(ot,nm);
+    list.appendChild(d);
+  });
+}
+function rM(){
+  if(!aC)return;
+  var me=gMe();var cv=gC();var ms=cv[aC]||[];
+  var area=document.getElementById("msgsArea");
+  area.innerHTML=ms.length?"":"<div style='text-align:center;color:var(--muted);font-size:13px;padding:40px'>Commencez la conversation !</div>";
+  ms.forEach(function(m){
+    var mine=m.f===me.matricule;
+    var row=document.createElement("div");row.className="msg-row "+(mine?"mine":"other");
+    row.innerHTML=((!mine)?'<div class="av" style="background:'+avc(m.fn)+';color:var(--navy);width:28px;height:28px;font-size:12px">'+m.fn[0]+'</div>':'')+'<div class="bubble">'+(mine?'':'<div class="bauthor">'+m.fn+'</div>')+m.t+'</div><div class="btime">'+m.ts+'</div>';
+    area.appendChild(row);
+  });
+  area.scrollTop=area.scrollHeight;
+}
+function sendPriv(){
+  if(!aC)return;
+  var me=gMe();var inp=document.getElementById("privInput");
+  var text=inp.value.trim();if(!text)return;
+  var cv=gC();if(!cv[aC])cv[aC]=[];
+  cv[aC].push({f:me.matricule,fn:me.nom,t:text,ts:nt()});
+  sC(cv);inp.value="";rM();rCL();
+}
+document.getElementById("privInput").addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendPriv()}});
+
+var aG=null;
+function createGrp(){
+  var me=gMe();
+  var name=document.getElementById("cg_n").value.trim();
+  var desc=document.getElementById("cg_d").value.trim();
+  var icon=document.getElementById("cg_i").value;
+  herr("cg_e");
+  if(!name){serr("cg_e","Entrez un nom");return}
+  var gs=gG();
+  gs.push({id:Date.now(),n:name,d:desc,ic:icon,cr:me.matricule,mb:[me.matricule],ms:[],at:nt()});
+  sG(gs);document.getElementById("cg_n").value="";document.getElementById("cg_d").value="";
+  closeModal("creategrp");rGL();notif('Groupe "'+name+'" créé ! 👥');
+}
+function joinGrp(id){
+  var me=gMe();var gs=gG();var g=null;
+  for(var i=0;i<gs.length;i++)if(gs[i].id===id){g=gs[i];break}
+  if(!g)return;
+  if(g.mb.indexOf(me.matricule)<0){g.mb.push(me.matricule);sG(gs)}
+  oGrp(id);
+}
+function oGrp(id){
+  var gs=gG();var g=null;
+  for(var i=0;i<gs.length;i++)if(gs[i].id===id){g=gs[i];break}
+  if(!g)return;
+  aG=id;
+  document.getElementById("gc_icon").textContent=g.ic;
+  document.getElementById("gc_title").textContent=g.n;
+  document.getElementById("gc_meta").textContent=g.mb.length+" membre(s) — "+g.d;
+  rGM();openModal("grpchat");
+}
+function rGM(){
+  if(!aG)return;
+  var me=gMe();var gs=gG();var g=null;
+  for(var i=0;i<gs.length;i++)if(gs[i].id===aG){g=gs[i];break}
+  if(!g)return;
+  var area=document.getElementById("gcMsgs");
+  area.innerHTML=g.ms.length?"":"<div style='text-align:center;color:var(--muted);font-size:13px;padding:40px'>Commencez la discussion !</div>";
+  g.ms.forEach(function(m){
+    var mine=m.f===me.matricule;
+    var row=document.createElement("div");row.className="msg-row "+(mine?"mine":"other");
+    row.innerHTML=((!mine)?'<div class="av" style="background:'+avc(m.fn)+';color:var(--navy);width:28px;height:28px;font-size:12px">'+m.fn[0]+'</div>':'')+'<div class="bubble">'+(mine?'':'<div class="bauthor">'+m.fn+'</div>')+m.t+'</div><div class="btime">'+m.ts+'</div>';
+    area.appendChild(row);
+  });
+  area.scrollTop=area.scrollHeight;
+}
+function sendGrpMsg(){
+  if(!aG)return;
+  var me=gMe();var inp=document.getElementById("gcInput");
+  var text=inp.value.trim();if(!text)return;
+  var gs=gG();var g=null;
+  for(var i=0;i<gs.length;i++)if(gs[i].id===aG){g=gs[i];break}
+  if(!g)return;
+  g.ms.push({f:me.matricule,fn:me.nom,t:text,ts:nt()});
+  sG(gs);inp.value="";rGM();rGL();
+}
+document.getElementById("gcInput").addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendGrpMsg()}});
+
+function rGL(){
+  var me=gMe();if(!me)return;
+  var gs=gG();var list=document.getElementById("grpList");
+  if(!gs.length){list.innerHTML="<div style='text-align:center;color:var(--muted);font-size:13px;padding:40px'>Aucun groupe — créez le premier !</div>";return}
+  list.innerHTML="";
+  gs.forEach(function(g){
+    var isMb=g.mb.indexOf(me.matricule)>=0;
+    var last=g.ms[g.ms.length-1];
+    var card=document.createElement("div");card.className="grp-card";
+    card.innerHTML='<div class="grp-av">'+g.ic+'</div><div style="flex:1"><div class="grp-name">'+g.n+'</div><div class="grp-meta">'+g.mb.length+' membre(s) · '+(last?last.t.substring(0,22)+"...":g.d||"Rejoindre")+'</div></div><span class="grp-badge">'+(isMb?"Membre":"Rejoindre")+'</span>';
+    (function(gid){card.onclick=function(){joinGrp(gid)}})(g.id);
+    list.appendChild(card);
+  });
+}
+
+var SEED=[
+  {nom:"Directeur Mbeki",cl:"Administration",t:"Les résultats des examens blancs sont disponibles dans Bulletins. Bon courage à tous !",ts:"08:45"},
+  {nom:"Prof. Diallo",cl:"Enseignant",t:"Le cours de physique-chimie de demain est déplacé en salle 12.",ts:"09:20"},
+  {nom:"Aminata K.",cl:"Terminale S",t:"Rappel : réunion parents-élèves vendredi à 15h en salle B4.",ts:"10:05"},
+  {nom:"Omar D.",cl:"2nde B",t:"Quelqu'un peut partager le programme de maths pour la semaine ?",ts:"11:30"}
+];
+function rFP(){
+  var stored=gP();var posts=stored.length?stored:SEED;
+  var c=document.getElementById("forumPosts");c.innerHTML="";
+  for(var i=posts.length-1;i>=0;i--){
+    var p=posts[i];var d=document.createElement("div");d.className="post-item";
+    d.innerHTML='<div class="post-hd"><div class="av" style="background:'+avc(p.nom)+';color:var(--navy)">'+p.nom[0]+'</div><div><div class="post-nom">'+p.nom+'</div><div class="post-cl">'+p.cl+'</div></div><div class="post-time">'+p.ts+'</div></div><div class="post-text">'+p.t+'</div>';
+    c.appendChild(d);
+  }
+}
+function postForum(){
+  var me=gMe();if(!me)return;
+  var inp=document.getElementById("forumInput");var text=inp.value.trim();if(!text)return;
+  var ps=gP().length?gP():JSON.parse(JSON.stringify(SEED));
+  ps.push({nom:me.nom,cl:me.classe,t:text,ts:nt()});
+  sP(ps);inp.value="";rFP();
+}
+document.getElementById("forumInput").addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();postForum()}});
+
+window.addEventListener("DOMContentLoaded",function(){
+  rFP();
+  var me=gMe();if(me)afterLogin();
+});
+</script>
+</body>
+</html>
